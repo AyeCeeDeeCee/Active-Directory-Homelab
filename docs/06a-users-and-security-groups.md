@@ -1,28 +1,70 @@
-# Active Directory Homelab – Users and Security Groups
+# Phase 6A – Users and Security Groups
 
-## Overview
+## Project Metadata
 
-This phase of the Active Directory Homelab focused on building a realistic organizational structure by creating domain user accounts, security groups, and assigning users to their appropriate departments. This establishes the foundation for future administration tasks including Group Policy Objects (GPOs), shared folders, NTFS permissions, and Windows client domain joins.
+| Property | Value |
+|----------|-------|
+| Project | Active Directory Homelab |
+| Author | Coach Torres |
+| Platform | Windows Server 2022 Evaluation |
+| Virtualization | Oracle VirtualBox |
+| Domain | coachtorres.local |
+| Status | Completed |
+| Documentation Status | Backfilled |
 
 ---
 
-## Objectives
+## Objective
 
-- Create Active Directory user accounts.
-- Create departmental security groups.
-- Assign users to the appropriate security groups.
-- Verify user and group creation using Active Directory Users and Computers (ADUC).
+Create representative Active Directory user accounts and Global Security Groups to simulate an enterprise organizational structure.
+
+This phase establishes role-based administration by assigning users to security groups rather than assigning permissions directly to individual accounts.
 
 ---
 
-## Organizational Unit
+## Lab Environment
 
-**Employees**
+| Component | Value |
+|----------|-------|
+| Domain Controller | AD-DC-01 |
+| Operating System | Windows Server 2022 Evaluation |
+| Domain | coachtorres.local |
+| Management Tool | Active Directory Users and Computers (ADUC) |
+| Organizational Unit | Employees |
+| Organizational Unit | Groups |
 
-Created the following domain users:
+---
 
-| Name | Username | Department |
-|------|----------|------------|
+## Architecture Overview
+
+Enterprise Active Directory environments organize users according to business functions instead of individual permissions.
+
+During this phase:
+
+- User accounts were created within the Employees Organizational Unit.
+- Global Security Groups were created to represent departments.
+- Users were assigned membership within their appropriate departmental group.
+
+This structure simplifies future administration and provides the foundation for Group Policy, shared resources, and delegated administration.
+
+---
+
+## Implementation Summary
+
+The Active Directory Users and Computers (ADUC) management console was used to provision user accounts and security groups.
+
+Five representative employee accounts were created within the Employees Organizational Unit.
+
+Four Global Security Groups were created within the Groups Organizational Unit.
+
+Users were then assigned membership according to departmental responsibilities.
+
+---
+
+## User Accounts
+
+| Display Name | Username | Department |
+|--------------|----------|------------|
 | Alicia Simmons | asimmons | IT |
 | Nathan Miller | nmiller | IT |
 | Sarah Chen | schen | Human Resources |
@@ -31,9 +73,9 @@ Created the following domain users:
 
 ---
 
-## Security Groups
+## Global Security Groups
 
-The following Global Security Groups were created within the **Groups** Organizational Unit:
+The following Global Security Groups were created:
 
 - IT
 - HR
@@ -42,10 +84,10 @@ The following Global Security Groups were created within the **Groups** Organiza
 
 ---
 
-## Group Memberships
+## Group Membership Validation
 
-| User | Security Group |
-|------|----------------|
+| User | Assigned Security Group |
+|------|-------------------------|
 | Alicia Simmons | IT |
 | Nathan Miller | IT |
 | Sarah Chen | HR |
@@ -54,42 +96,73 @@ The following Global Security Groups were created within the **Groups** Organiza
 
 ---
 
+## Validation Results
+
+Successful validation confirmed:
+
+- Employee user accounts created successfully
+- Global Security Groups created successfully
+- Users assigned to the appropriate department
+- Group memberships verified in ADUC
+- Organizational Units functioning correctly
+
+These results confirm that the Active Directory environment is prepared for future authorization, Group Policy, and delegated administration.
+
+---
+
 ## Skills Demonstrated
 
 - Active Directory Users and Computers (ADUC)
 - Organizational Unit administration
-- User account creation
-- Security Group creation
+- User provisioning
+- Security Group administration
 - Group membership management
-- Active Directory administration using Windows Server 2022
+- Enterprise identity administration
+- Windows Server 2022 Active Directory management
 
 ---
 
 ## Evidence
 
-Screenshots captured during this phase:
+### GUI Evidence
 
-- `screenshots/AD-Created-Users-Screenshot 2026-07-08 171902.png`
-- `screenshots/AD-Created-Groups-Screenshot 2026-07-08 172004.png`
+Supporting screenshots include:
+
+- `AD-Created-Users-Screenshot 2026-07-08 171902.png`
+- `AD-Created-Groups-Screenshot 2026-07-08 172004.png`
+
+These screenshots verify successful creation of both user accounts and Global Security Groups within Active Directory.
 
 ---
 
 ## Lessons Learned
 
-This phase reinforced one of the most important concepts in Active Directory administration:
+This phase reinforced a core Active Directory design principle:
 
-> Permissions should be assigned to **Security Groups**, and users should become members of those groups instead of assigning permissions directly to individual user accounts.
+> Assign permissions to Security Groups rather than directly to user accounts.
 
-This approach simplifies administration, improves scalability, and follows enterprise best practices.
+Managing permissions through group membership:
+
+- simplifies administration,
+- improves scalability,
+- reduces administrative overhead,
+- follows Microsoft enterprise best practices,
+- supports least-privilege administration.
 
 ---
 
-## Next Steps
+## Status
 
-The next phase of the project will include:
+**Users and Security Groups**
 
-- Joining a Windows 11 client to the domain.
-- Logging in using domain user accounts.
-- Creating shared folders.
-- Configuring NTFS permissions.
-- Applying Group Policy Objects (GPOs).
+✅ Completed
+
+The Active Directory environment now contains representative enterprise user accounts and departmental security groups, providing the identity structure required for centralized administration.
+
+---
+
+## Next Phase
+
+**Phase 6 – Organizational Units**
+
+The next phase documents the Organizational Unit hierarchy used to organize administrative accounts, employees, groups, service accounts, domain controllers, and workstations within the `coachtorres.local` Active Directory environment.

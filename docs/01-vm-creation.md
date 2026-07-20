@@ -1,4 +1,18 @@
-# 01 – Virtual Machine Creation
+# Phase 1 – Virtual Machine Creation
+
+## Project Metadata
+
+| Property | Value |
+|----------|-------|
+| Project | Active Directory Homelab |
+| Author | Coach Torres |
+| Platform | Windows Server 2022 Evaluation |
+| Virtualization | Oracle VirtualBox |
+| Domain | coachtorres.local |
+| Status | Completed |
+| Documentation Status | Backfilled |
+
+---
 
 ## Objective
 
@@ -6,7 +20,7 @@ Create a stable Windows Server 2022 Domain Controller virtual machine that will 
 
 ---
 
-## Environment
+## Lab Environment
 
 | Component | Value |
 |----------|-------|
@@ -21,6 +35,11 @@ Create a stable Windows Server 2022 Domain Controller virtual machine that will 
 | Graphics Controller | VMSVGA |
 | VRAM | 128 MB |
 | Storage Controller | SATA (Intel AHCI) |
+# 01 – Virtual Machine Creation
+
+## Objective
+
+Create a stable Windows Server 2022 Domain Controller virtual machine that will serve as the foundation for the Active Directory Homelab.
 
 ---
 
