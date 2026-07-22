@@ -188,8 +188,6 @@ Reset Account Lockout Counter configured to **10 minutes**.
 
 Completed Account Lockout Policy showing all configured settings.
 
-## Evidence
-
 The following screenshots document the implementation and validation of the Account Lockout Policy within the **FTOS Baseline** Group Policy Object.
 
 | Screenshot | Description |
