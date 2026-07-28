@@ -217,8 +217,26 @@ This phase includes evidence demonstrating:
 - Administrative PowerShell commands
 - Automation scripts
 - Validation of completed tasks
+- Visual Studio Code development environment
+- Git source control integration
 
-Screenshots and supporting evidence are stored within the project's `screenshots` directory.
+Supporting screenshots and additional evidence are stored within the project's
+[`screenshots`](../screenshots/) directory.
+
+### Phase 08A Screenshots
+
+The following screenshots document the development environment and implementation
+used throughout Phase 08A:
+
+| Evidence | Description |
+|----------|-------------|
+| [VS Code Installation](../screenshots/VSCode-Install-Screenshot%202026-07-24%20074235.png) | Visual Studio Code installation via Winget. |
+| [VS Code Version](../screenshots/Vscode-Version-Screenshot%202026-07-24%20075444.png) | Verification of the Visual Studio Code installation using `code --version`. |
+| [VS Code Workspace](../screenshots/VSCode-Downloaded-Screenshot%202026-07-24%20105527.png) | Active Directory Homelab repository opened in Visual Studio Code. |
+| [PowerShell Script](../screenshots/VSCode-Script-Screenshot%202026-07-24%20110444.png) | Initial implementation of `Create-BulkADUsers.ps1`. |
+| [Project Structure](../screenshots/VSCode-File-Tree-Screenshot%202026-07-24%20111949.png) | Repository structure for the Active Directory Homelab project. |
+| [Source Control](../screenshots/VSCode-Screenshot%202026-07-24%20113425.png) | Git Source Control integration within Visual Studio Code. |
+| [Development Environment](../screenshots/VSCode-final-Screenshot%202026-07-24%20144924.png) | Completed Phase 08A Visual Studio Code development environment. |
 
 ---
 
