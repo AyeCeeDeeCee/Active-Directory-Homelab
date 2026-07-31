@@ -8,7 +8,7 @@
 | **Project** | Active Directory Homelab |
 | **Repository** | Active-Directory-Homelab |
 | **Phase** | 08A – Observe |
-| **Document** | ActiveDirectory-Audit-PowerShell-Commands.md |
+| **Document** | Phase-08A-Audit-Powershell-Commands.md |
 | **Platform** | Windows Server 2022 |
 | **Domain** | coachtorres.local |
 | **Author** | Coach Torres |

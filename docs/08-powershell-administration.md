@@ -13,7 +13,7 @@
 | **Domain** | coachtorres.local |
 | **Author** | Coach Torres |
 | **Status** | In Progress |
-| **Last Updated** | 2026-07-26 |
+| **Last Updated** | 2026-07-31 |
 
 ---
 
@@ -147,28 +147,49 @@ No production objects were modified during this stage.
 
 ### Supporting Documentation
 
-The complete PowerShell audit commands, command explanations, audit findings, and verification process for Phase 08A are documented separately:
+The complete audit command log for Phase 08A is documented
+separately:
 
-- [Active Directory Audit PowerShell Commands](ActiveDirectory-Audit-PowerShell-Commands.md)
+- [Phase 08A – Audit PowerShell Commands](Phase-08A-Audit-PowerShell-Commands.md)
 
-This supporting document contains the detailed read-only audit procedures used to validate the Active Directory environment before any administrative or automation tasks were performed.
+This document contains the complete read-only audit,
+verification commands, and command output used to establish
+the Active Directory baseline before administrative changes
+were performed.
 
 ---
 
 ## Phase 08B – Respond
 
-The second stage focuses on routine Active Directory administration through PowerShell.
+The second stage focused on performing routine Active
+Directory administration using PowerShell against the
+existing enterprise environment.
 
-Typical administrative tasks include:
+Completed administrative activities included:
 
-- Resetting passwords
-- Unlocking user accounts
-- Enabling and disabling accounts
+- Moving computer objects
 - Updating user attributes
 - Managing security group memberships
-- Moving users between Organizational Units
+- Forcing password changes
+- Resetting user passwords
+- Disabling and enabling user accounts
+- Investigating and correcting account lockout policy
+- Unlocking user accounts
+- Performing a controlled employee transfer
 
-These activities represent common Help Desk and Systems Administration responsibilities performed within enterprise environments.
+Every administrative action was verified immediately after
+execution to confirm the expected Active Directory state.
+
+### Supporting Documentation
+
+The complete operational command log for Phase 08B is
+documented separately:
+
+- [Phase 08B – PowerShell Administration Log](Phase-08B-PowerShell-Administration-Log.md)
+
+This document contains the verified PowerShell commands,
+administrative workflow, observations, and validation
+performed throughout Phase 08B.
 
 ---
 
@@ -190,11 +211,17 @@ Automation is introduced only after the administrative processes have been under
 
 ## Lessons Learned
 
-PowerShell should be introduced after administrators understand the environment they are responsible for managing.
+PowerShell administration should begin with verification.
 
-Beginning with read-only auditing establishes confidence in the environment before administrative changes are made.
+Read-only auditing establishes a trusted baseline before
+administrative changes are introduced.
 
-Building automation on top of verified administrative processes produces safer, more reliable enterprise solutions.
+Capturing verified command output creates an operational
+record that can later be interpreted for documentation and
+portfolio purposes.
+
+Separating command logs from phase documentation improves
+maintainability and reduces documentation drift.
 
 ---
 
@@ -212,10 +239,11 @@ Bulk provisioning scripts introduced during this phase are intended to demonstra
 
 This phase includes evidence demonstrating:
 
-- PowerShell audit commands
-- Active Directory verification
+- Active Directory audit commands
 - Administrative PowerShell commands
-- Automation scripts
+- PowerShell automation scripts
+- Active Directory verification
+- Group Policy configuration
 - Validation of completed tasks
 - Visual Studio Code development environment
 - Git source control integration
@@ -237,6 +265,16 @@ used throughout Phase 08A:
 | [Project Structure](../screenshots/VSCode-File-Tree-Screenshot%202026-07-24%20111949.png) | Repository structure for the Active Directory Homelab project. |
 | [Source Control](../screenshots/VSCode-Screenshot%202026-07-24%20113425.png) | Git Source Control integration within Visual Studio Code. |
 | [Development Environment](../screenshots/VSCode-final-Screenshot%202026-07-24%20144924.png) | Completed Phase 08A Visual Studio Code development environment. |
+
+### Phase 08B Screenshots
+
+The following screenshots document the administrative tasks and policy
+configuration completed throughout Phase 08B:
+
+| Evidence | Description |
+|----------|-------------|
+| [Account Lockout Threshold Configuration](../screenshots/GPMC-Lkt-thd-Screenshot%202026-07-28%20174849.png) | Group Policy Management Console showing the Account Lockout Threshold configured within the Default Domain Policy. |
+| [Account Lockout Policy Applied](../screenshots/GPMC-Lkt-Apy-Screenshot%202026-07-28%20175126.png) | Group Policy Management Console showing the completed Account Lockout Policy configuration after applying the required settings. |
 
 ---
 
