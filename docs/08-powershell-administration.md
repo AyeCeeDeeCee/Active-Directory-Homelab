@@ -192,10 +192,31 @@ administrative workflow, observations, and validation
 performed throughout Phase 08B.
 
 ---
-
 ## Phase 08C – Automate
 
-After developing confidence administering Active Directory through PowerShell, automation is introduced to reduce repetitive operational tasks.
+The final stage of Phase 08 introduces reusable
+PowerShell automation into the existing Active Directory
+environment.
+
+Automation builds upon the observation and administrative
+experience developed during Phases 08A and 08B by
+converting repeatable operational tasks into reusable
+PowerShell workflows.
+
+The first completed automation objective focused on
+Enterprise Reporting through the development of
+`Get-EnterpriseADUserReport.ps1`.
+
+Subsequent automation objectives continue building a
+reusable administrative toolkit against the canonical
+enterprise environment.
+
+### Supporting Documentation
+
+The complete implementation log for Phase 08C is
+documented separately:
+
+- [Phase 08C – PowerShell Automation Log](Phase-08C-PowerShell-Automation-Log.md)
 
 Planned automation includes:
 
