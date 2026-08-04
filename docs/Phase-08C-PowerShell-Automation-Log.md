@@ -14,7 +14,7 @@
 | **Domain** | coachtorres.local |
 | **Author** | Coach Torres |
 | **Status** | In Progress |
-| **Last Updated** | 2026-08-03 |
+| **Last Updated** | 2026-08-04 |
 
 ---
 
@@ -81,9 +81,10 @@ Develop a reusable enterprise reporting script.
 
 ### Evidence
 
-- VS Code implementation screenshot
-- PowerShell execution screenshot
-- CSV verification screenshot
+- `screenshots/Phase08C-03-VSC-Entr-Usr-Screenshot.png`
+- `screenshots/Phase08C-03-Auto-Log-Screenshot.png`
+- PowerShell command history captured.
+- Console output verified.
 
 ### Result
 
@@ -104,4 +105,86 @@ This objective establishes the first reusable reporting
 workflow in the transition from manual Active Directory
 administration to PowerShell automation.
 
+## 08C-03 – Account Lifecycle Automation
+
+### Objective
+
+Develop reusable PowerShell workflows for common
+Active Directory account lifecycle administration.
+
+### Implemented
+
+- Manage-EnterpriseUser.ps1
+
+### Engineering
+
+- Imported the ActiveDirectory module.
+- Created a reusable enterprise user administration toolkit.
+- Implemented Disable-EnterpriseUser.
+- Implemented Enable-EnterpriseUser.
+- Implemented Unlock-EnterpriseUser.
+- Implemented Reset-EnterpriseUserPassword.
+- Implemented Set-EnterpriseUserPasswordChange.
+
+### Verification
+
+- Successfully loaded the toolkit into the PowerShell session on AD-DC-01.
+- Verified PowerShell function availability using Get-Command.
+- Verified Disable-EnterpriseUser.
+- Verified Enable-EnterpriseUser.
+- Verified Reset-EnterpriseUserPassword.
+- Verified Set-EnterpriseUserPasswordChange.
+- Verified Active Directory password complexity enforcement.
+
+### Evidence
+
+- PowerShell command history captured.
+- Console output verified.
+- ⏳ Verification screenshots scheduled for capture during the next AD-DC-01 session.
+
+### Result
+
+Account Lifecycle Automation Version 1 completed
+successfully.
+
+The reusable toolkit provides standardized enterprise
+PowerShell workflows for managing the lifecycle of
+existing Active Directory user accounts.
+
+### Engineering Notes
+
+Development occurred on the Windows host using VS Code.
+
+Verification occurred on AD-DC-01 against the canonical
+Active Directory environment.
+
+During implementation, PowerShell function scope was
+investigated after the toolkit was initially executed
+without making the functions available in the current
+PowerShell session.
+
+The toolkit was successfully loaded by dot-sourcing:
+
+```powershell
+. .\Manage-EnterpriseUser.ps1
+```
+
+This implementation introduced the distinction between
+executing a PowerShell script and loading reusable
+functions into an interactive PowerShell session.
+
+Password reset verification also demonstrated Active
+Directory password complexity enforcement by rejecting
+a non-compliant password before successfully accepting
+a compliant replacement password.
+
+The toolkit consolidates common user lifecycle
+administration into reusable PowerShell functions that
+simplify enterprise account management while providing
+consistent verification after administrative actions.
+
+This objective establishes the project's first reusable
+enterprise administrative toolkit and provides the
+foundation for future security group, Organizational
+Unit, and baseline automation workflows.
 
