@@ -194,41 +194,56 @@ performed throughout Phase 08B.
 ---
 ## Phase 08C – Automate
 
-The final stage of Phase 08 introduces reusable
-PowerShell automation into the existing Active Directory
-environment.
+## Phase 08C – Automate
+
+Phase 08C introduces reusable PowerShell automation into the
+existing Active Directory environment.
 
 Automation builds upon the observation and administrative
-experience developed during Phases 08A and 08B by
-converting repeatable operational tasks into reusable
-PowerShell workflows.
+experience developed during Phases 08A and 08B by converting
+verified administrative procedures into reusable PowerShell
+workflows.
 
-The first completed automation objective focused on
-Enterprise Reporting through the development of
-`Get-EnterpriseADUserReport.ps1`.
+The canonical `coachtorres.local` Active Directory
+environment remains the primary proof-of-work environment.
 
-Subsequent automation objectives continue building a
-reusable administrative toolkit against the canonical
-enterprise environment.
+Automation is developed incrementally against existing
+enterprise users, security groups, and Organizational Units
+rather than replacing the administrative experience
+established during earlier phases.
 
-### Supporting Documentation
+### Automation Engineering Workflow
 
-The complete implementation log for Phase 08C is
-documented separately:
+PowerShell source code is developed and maintained within
+the local Git repository using Visual Studio Code.
 
-- [Phase 08C – PowerShell Automation Log](Phase-08C-PowerShell-Automation-Log.md)
+Completed scripts are transferred to AD-DC-01 for execution
+and verification against the canonical Active Directory
+environment.
 
-Planned automation includes:
+The Git repository remains the authoritative source of
+PowerShell code while AD-DC-01 remains the execution and
+verification environment.
 
-- Bulk user provisioning
-- Bulk security group creation
-- Bulk Organizational Unit creation
-- Active Directory reporting
-- Account lifecycle automation
+The automation workflow follows the project's established
+engineering process:
 
-Automation is introduced only after the administrative processes have been understood and validated.
+```text
+Develop
+    ↓
+Transfer
+    ↓
+Execute
+    ↓
+Verify
+    ↓
+Capture
+    ↓
+Interpret
 
 ---
+
+## Lessons Learned
 
 ## Lessons Learned
 
@@ -237,12 +252,29 @@ PowerShell administration should begin with verification.
 Read-only auditing establishes a trusted baseline before
 administrative changes are introduced.
 
+Reusable PowerShell functions can convert validated
+administrative procedures into repeatable workflows while
+preserving administrator control over execution.
+
+Dot-sourcing allows functions defined within a PowerShell
+script to remain available within the current interactive
+PowerShell session.
+
+Administrative automation should verify the resulting
+Active Directory state rather than assuming that a command
+completed as intended.
+
+Controlled and reversible changes provide a practical way
+to test modifying automation while preserving an established
+enterprise baseline.
+
 Capturing verified command output creates an operational
 record that can later be interpreted for documentation and
 portfolio purposes.
 
-Separating command logs from phase documentation improves
-maintainability and reduces documentation drift.
+Separating operational logs from portfolio documentation
+improves maintainability, preserves implementation detail,
+and reduces documentation drift.
 
 ---
 
@@ -251,8 +283,6 @@ maintainability and reduces documentation drift.
 The Active Directory environment created during earlier phases remains the source of truth throughout Phase 08.
 
 The five manually created enterprise users continue to represent existing production accounts and are administered through PowerShell rather than recreated through automation.
-
-Bulk provisioning scripts introduced during this phase are intended to demonstrate repeatable onboarding workflows for future users while preserving the integrity of the existing enterprise environment.
 
 ---
 
@@ -296,6 +326,16 @@ configuration completed throughout Phase 08B:
 |----------|-------------|
 | [Account Lockout Threshold Configuration](../screenshots/GPMC-Lkt-thd-Screenshot%202026-07-28%20174849.png) | Group Policy Management Console showing the Account Lockout Threshold configured within the Default Domain Policy. |
 | [Account Lockout Policy Applied](../screenshots/GPMC-Lkt-Apy-Screenshot%202026-07-28%20175126.png) | Group Policy Management Console showing the completed Account Lockout Policy configuration after applying the required settings. |
+
+### Phase 08C Screenshots
+
+The following screenshots document the PowerShell automation
+development and verification completed during Phase 08C:
+
+| Evidence | Description |
+| --- | --- |
+| [Security Group Administration Script](../screenshots/Phase08C-04-VSC-Script-Screenshot%202026-08-09%20092157.png) | Visual Studio Code implementation of `Manage-EnterpriseGroup.ps1` within the local Git repository development environment. |
+| [Enterprise Group Report Verification](../screenshots/Phase08C-04-Entr-Grp-Rpt-Vrfd-Screenshot%202026-08-09%20092003.png) | AD-DC-01 PowerShell verification showing the loaded security group administration function and the final verified enterprise group-membership report. |
 
 ---
 
