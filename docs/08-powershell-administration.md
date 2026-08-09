@@ -192,7 +192,6 @@ administrative workflow, observations, and validation
 performed throughout Phase 08B.
 
 ---
-## Phase 08C – Automate
 
 ## Phase 08C – Automate
 
@@ -243,7 +242,57 @@ Interpret
 
 ---
 
-## Lessons Learned
+### Completed Automation Objectives
+
+#### 08C-02 – Enterprise Reporting
+
+Implemented and verified:
+
+`Get-EnterpriseADUserReport.ps1`
+
+The reporting workflow retrieves enterprise user
+information including account identity, department,
+enabled status, security group membership, and
+Organizational Unit placement.
+
+#### 08C-03 – Account Lifecycle Automation
+
+Implemented and verified:
+
+`Manage-EnterpriseUser.ps1`
+
+Reusable functions provide verified workflows for
+common enterprise user lifecycle administration.
+
+#### 08C-04 – Security Group Administration
+
+Implemented and verified:
+
+`Manage-EnterpriseGroup.ps1`
+
+Reusable functions provide security group membership
+review, membership testing, controlled membership
+modification, and enterprise group reporting.
+
+#### 08C-05 – Organizational Unit Administration
+
+Implemented and verified:
+
+`Manage-EnterpriseOU.ps1`
+
+Reusable functions provide Organizational Unit review,
+Active Directory object-placement identification,
+placement verification, controlled object movement, and
+enterprise OU reporting.
+
+A controlled and reversible test moved WIN11-01 from the
+Workstations OU to the Lab OU and returned the computer
+to Workstations after successful verification.
+
+Final reporting confirmed that the canonical Active
+Directory object-placement baseline was preserved.
+
+---
 
 ## Lessons Learned
 
@@ -267,6 +316,14 @@ completed as intended.
 Controlled and reversible changes provide a practical way
 to test modifying automation while preserving an established
 enterprise baseline.
+
+Active Directory object identity and object location should
+be treated as separate concepts during automation.
+
+An object's Distinguished Name changes when the object is
+moved between Organizational Units, while its ObjectGUID
+remains stable and can be used for reliable post-move
+verification.
 
 Capturing verified command output creates an operational
 record that can later be interpreted for documentation and
@@ -336,7 +393,8 @@ development and verification completed during Phase 08C:
 | --- | --- |
 | [Security Group Administration Script](../screenshots/Phase08C-04-VSC-Script-Screenshot%202026-08-09%20092157.png) | Visual Studio Code implementation of `Manage-EnterpriseGroup.ps1` within the local Git repository development environment. |
 | [Enterprise Group Report Verification](../screenshots/Phase08C-04-Entr-Grp-Rpt-Vrfd-Screenshot%202026-08-09%20092003.png) | AD-DC-01 PowerShell verification showing the loaded security group administration function and the final verified enterprise group-membership report. |
-
+| [Organizational Unit Administration Script](../screenshots/Phase08C-05-VSC-Spt-Screenshot%202026-08-09%20140439.png) | Visual Studio Code implementation of `Manage-EnterpriseOU.ps1` within the local Git repository development environment. |
+| [Enterprise OU Report Verification](../screenshots/Phase08C-05-OU-Rpt-Vfd-Screenshot%202026-08-09%20140321.png) | AD-DC-01 PowerShell verification showing the loaded Organizational Unit administration function and the final verified enterprise OU object-placement report. |
 ---
 
 ## References

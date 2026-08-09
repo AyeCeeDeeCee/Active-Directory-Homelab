@@ -357,3 +357,272 @@ administration capabilities established during 08C-03
 while preserving verification as part of every modifying
 workflow.
 
+## 08C-05 – Organizational Unit Administration
+
+### Objective
+
+Develop and verify reusable PowerShell workflows for
+reviewing and administering the existing Organizational
+Unit structure.
+
+The implementation focused on the canonical
+coachtorres.local Active Directory environment and
+introduced reusable workflows for reviewing OUs,
+identifying object placement, verifying expected
+placement, moving Active Directory objects between
+approved OUs, and reporting OU object assignments.
+
+All modifying operations were performed using controlled
+and reversible testing to preserve the canonical
+enterprise baseline.
+
+### Implementation
+
+Created and verified:
+
+`Manage-EnterpriseOU.ps1`
+
+The script provides reusable PowerShell functions for
+Organizational Unit administration and Active Directory
+object-placement verification within the canonical
+enterprise environment.
+
+Implemented functions:
+
+• Get-EnterpriseOU
+
+• Get-EnterpriseObjectOU
+
+• Test-EnterpriseObjectOU
+
+• Move-EnterpriseADObject
+
+• Get-EnterpriseOUReport
+
+### Testing and Verification
+
+The existing Organizational Unit structure was verified
+before modifying automation was introduced.
+
+The following OUs were confirmed:
+
+• Admin
+
+• Domain Controllers
+
+• Employees
+
+• Groups
+
+• Lab
+
+• Service Accounts
+
+• Workstations
+
+Distinguished Names were verified against the
+coachtorres.local domain.
+
+The five canonical enterprise users were verified within
+the Employees OU:
+
+• Alicia Simmons – asimmons
+
+• David Martinez – dmartinez
+
+• Micheal Rodriguez – mrodriguez
+
+• Nathan Miller – nmiller
+
+• Sara Chung – schung
+
+Computer-object placement was also verified:
+
+• WIN11-01 – Workstations
+
+• WIN-J24UO6114L0 – Domain Controllers
+
+The toolkit was transferred to AD-DC-01 and loaded into
+the current PowerShell session using dot-sourcing.
+
+Function availability was verified using Get-Command.
+
+Get-EnterpriseOU was executed and reproduced the verified
+Organizational Unit baseline.
+
+Get-EnterpriseObjectOU was verified against WIN11-01 and
+correctly returned the computer object within the
+Workstations OU.
+
+Test-EnterpriseObjectOU was then verified against both
+known-true and known-false placement states.
+
+Known-true test:
+
+• WIN11-01 – Workstations → True
+
+Known-false test:
+
+• WIN11-01 – Lab → False
+
+### Controlled Object Move Verification
+
+A controlled and reversible object-placement change was
+performed using WIN11-01.
+
+The verified starting state was:
+
+• WIN11-01 – Workstations
+
+Move-EnterpriseADObject was used to move WIN11-01 from
+the Workstations OU to the Lab OU.
+
+The workflow returned:
+
+• Workstations → Lab → True
+
+The resulting Active Directory state was independently
+verified using Get-EnterpriseObjectOU.
+
+Observed placement:
+
+• WIN11-01 – Lab
+
+Move-EnterpriseADObject was then used to return WIN11-01
+from the Lab OU to the Workstations OU.
+
+The workflow returned:
+
+• Lab → Workstations → True
+
+Final independent verification confirmed:
+
+• WIN11-01 – Workstations
+
+The temporary object-placement change was therefore
+successfully reversed and the original verified
+workstation baseline was restored.
+
+Move-EnterpriseADObject preserves the object's ObjectGUID
+before the move and uses that stable identifier for
+post-move verification.
+
+This allows the same Active Directory object to be
+verified after its Distinguished Name changes as a
+result of moving between Organizational Units.
+
+### Enterprise OU Report Verification
+
+Get-EnterpriseOUReport was executed against the
+canonical Active Directory environment.
+
+The final report returned the following verified
+object-placement assignments:
+
+• Domain Controllers – WIN-J24UO6114L0 – computer
+
+• Employees – Alicia Simmons – user
+
+• Employees – David Martinez – user
+
+• Employees – Micheal Rodriguez – user
+
+• Employees – Nathan Miller – user
+
+• Employees – Sara Chung – user
+
+• Groups – Accounting – group
+
+• Groups – HR – group
+
+• Groups – IT – group
+
+• Groups – Managers – group
+
+• Workstations – WIN11-01 – computer
+
+The report used one-level searches against each
+Organizational Unit to identify objects directly
+contained within the verified OU structure.
+
+The final report matched the Active Directory object
+placement baseline verified at the beginning of 08C-05.
+
+This confirmed that the temporary WIN11-01 move used
+during testing had been successfully reversed and that
+the canonical Organizational Unit state was preserved.
+
+### Evidence
+
+Evidence captured during 08C-05 includes:
+
+• VS Code implementation evidence showing
+Manage-EnterpriseOU.ps1 within the local Git repository
+development environment.
+
+• PowerShell verification evidence from AD-DC-01 showing
+successful loading of the Organizational Unit toolkit,
+function availability, and the verified enterprise
+OU object-placement report.
+
+Evidence files:
+
+• Phase08C-05-VSC-Spt-Screenshot 2026-08-09 140439.png
+
+• Phase08C-05-OU-Rpt-Vfd-Screenshot 2026-08-09 140321.png
+
+### Engineering Notes
+
+Development occurred on the Windows host using VS Code.
+
+Execution and verification occurred on AD-DC-01 against
+the canonical Active Directory environment.
+
+Manage-EnterpriseOU.ps1 was developed incrementally.
+Each function was added to the authoritative Git repository
+source, transferred to the Domain Controller, loaded using
+dot-sourcing, and verified before development continued.
+
+The implementation reinforced the importance of verifying
+Active Directory object placement before performing
+Organizational Unit administration.
+
+Read-only and verification functions were implemented
+before modifying automation was introduced.
+
+A controlled and reversible object move was used to
+validate Organizational Unit administration without
+permanently altering the canonical enterprise baseline.
+
+WIN11-01 was temporarily moved from the Workstations OU
+to the Lab OU, the resulting placement was independently
+verified, and the computer object was then returned to
+the Workstations OU.
+
+The object move workflow demonstrated an important
+Active Directory identity concept.
+
+An object's Distinguished Name changes when the object
+is moved between Organizational Units.
+
+The object's ObjectGUID remains stable and can therefore
+be used to locate and verify the same object after the
+move.
+
+Final reporting confirmed that WIN11-01 had been restored
+to the Workstations OU and that the original canonical
+object-placement baseline was preserved.
+
+Get-EnterpriseOUReport also introduced reusable structured
+reporting of objects directly contained within the
+enterprise Organizational Unit structure.
+
+The completed toolkit provides reusable workflows for
+reviewing OUs, identifying object placement, testing
+expected placement, moving Active Directory objects, and
+reporting OU assignments.
+
+This objective extends the reusable PowerShell
+administration capabilities established during 08C-03
+and 08C-04 while preserving verification and reversible
+testing as core requirements for modifying automation.
