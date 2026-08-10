@@ -1,3 +1,19 @@
+#
+# ============================================================
+# Project Metadata
+# ============================================================
+# Project:      Active Directory Homelab
+# Repository:   Active-Directory-Homelab
+# Phase:        08C – PowerShell Automation
+# Objective:    08C-05 – Organizational Unit Administration
+# Script:       Manage-EnterpriseOU.ps1
+# Platform:     Windows Server 2022
+# Domain:       coachtorres.local
+# Author:       Coach Torres
+# Status:       Verified
+# Last Updated: 2026-08-09
+# ============================================================
+
 function Get-EnterpriseOU {
 
     Get-ADOrganizationalUnit -Filter * |

@@ -626,3 +626,244 @@ This objective extends the reusable PowerShell
 administration capabilities established during 08C-03
 and 08C-04 while preserving verification and reversible
 testing as core requirements for modifying automation.
+
+## 08C-06 – Administrative Toolkit
+
+### Objective
+
+Develop and verify a reusable Active Directory administrative
+toolkit that provides a single entry point for the enterprise
+PowerShell automation created during Phase 08C.
+
+The implementation consolidates access to the previously
+verified enterprise reporting, account lifecycle, security
+group, and Organizational Unit administration workflows
+without unnecessarily merging or rewriting the underlying
+PowerShell components.
+
+The toolkit preserves separation of administrative
+responsibilities while allowing the verified functions to be
+loaded together into a single PowerShell session.
+
+### Implementation
+
+Created and verified:
+
+`Import-EnterpriseADToolkit.ps1`
+
+The script provides a single entry point for loading the
+verified Phase 08C enterprise PowerShell administration
+components into the current PowerShell session.
+
+The toolkit loader imports the Active Directory PowerShell
+module and uses `$PSScriptRoot` to locate and dot-source the
+component scripts relative to the loader's own location.
+
+Loaded components:
+
+• `Get-EnterpriseADUserReport.ps1`
+
+• `Manage-EnterpriseUser.ps1`
+
+• `Manage-EnterpriseGroup.ps1`
+
+• `Manage-EnterpriseOU.ps1`
+
+Using `$PSScriptRoot` avoids hard-coding the toolkit source
+directory and allows the component scripts to remain
+organized as separate administrative responsibilities.
+
+The existing enterprise automation scripts were also
+standardized with consistent project metadata while
+preserving their previously verified administrative logic.
+
+`Get-EnterpriseADUserReport.ps1` was refactored from an
+immediately executing script into the reusable
+`Get-EnterpriseADUserReport` function.
+
+This change allows the reporting component to be loaded by
+the administrative toolkit without automatically generating
+a report when the toolkit is imported.
+
+The underlying reporting workflow and verified report
+contents were preserved.
+
+### Testing and Verification
+
+The completed administrative toolkit was transferred to
+AD-DC-01 and loaded into the current PowerShell session
+using dot-sourcing.
+
+The toolkit loader executed successfully with no output,
+confirming that the component scripts could be loaded
+without automatically executing administrative workflows.
+
+Representative function availability was verified using
+`Get-Command`.
+
+Verified functions included:
+
+• `Get-EnterpriseADUserReport`
+
+• `Disable-EnterpriseUser`
+
+• `Get-EnterpriseGroupMember`
+
+• `Get-EnterpriseOU`
+
+This confirmed successful loading of functionality from
+each major toolkit component.
+
+The refactored `Get-EnterpriseADUserReport` function was
+then executed independently.
+
+The resulting report successfully returned the previously
+verified canonical enterprise user state, including:
+
+• User identity and SamAccountName
+
+• Department assignment
+
+• Enabled status
+
+• Security group memberships
+
+• Organizational Unit location
+
+The successful report confirmed that converting the
+reporting script into a reusable function preserved its
+verified behavior.
+
+A complete toolkit inventory was then performed using:
+
+`Get-Command *Enterprise*`
+
+The loaded PowerShell session contained 16 reusable
+enterprise administration functions:
+
+• `Add-EnterpriseGroupMember`
+
+• `Disable-EnterpriseUser`
+
+• `Enable-EnterpriseUser`
+
+• `Get-EnterpriseADUserReport`
+
+• `Get-EnterpriseGroupMember`
+
+• `Get-EnterpriseGroupReport`
+
+• `Get-EnterpriseObjectOU`
+
+• `Get-EnterpriseOU`
+
+• `Get-EnterpriseOUReport`
+
+• `Move-EnterpriseADObject`
+
+• `Remove-EnterpriseGroupMember`
+
+• `Reset-EnterpriseUserPassword`
+
+• `Set-EnterpriseUserPasswordChange`
+
+• `Test-EnterpriseGroupMember`
+
+• `Test-EnterpriseObjectOU`
+
+• `Unlock-EnterpriseUser`
+
+The final inventory confirmed that reporting, account
+lifecycle administration, security group administration,
+Organizational Unit administration, and verification
+functions were available together within a single
+PowerShell session.
+
+### Evidence
+
+Evidence captured during 08C-06 includes:
+
+• Visual Studio Code implementation evidence showing
+`Import-EnterpriseADToolkit.ps1` within the local Git
+repository development environment.
+
+• PowerShell verification evidence from AD-DC-01 showing
+successful toolkit loading, execution of the refactored
+enterprise user report, and availability of the complete
+enterprise administrative function inventory.
+
+Evidence files:
+
+• `Phase08C-06-VSC-Ipt-Tkt-Screenshot 2026-08-09 220656.png`
+
+• `Phase08C-06-Get-Cmd-Screenshot 2026-08-09 220402.png`
+
+### Engineering Notes
+
+Development occurred on the Windows host using Visual Studio
+Code.
+
+Execution and verification occurred on AD-DC-01 against the
+canonical Active Directory environment.
+
+The administrative toolkit was designed to reuse the
+verified automation developed during earlier Phase 08C
+objectives rather than duplicate or unnecessarily rewrite
+working PowerShell logic.
+
+The component scripts remain separated by administrative
+responsibility:
+
+• Enterprise reporting
+
+• Account lifecycle administration
+
+• Security group administration
+
+• Organizational Unit administration
+
+`Import-EnterpriseADToolkit.ps1` provides a single entry
+point that loads these components into the current
+PowerShell session.
+
+This architecture preserves separation of responsibilities
+while improving administrative usability.
+
+Using `$PSScriptRoot` allows the loader to locate its
+component scripts relative to its own directory instead of
+depending on a hard-coded source path.
+
+The enterprise reporting workflow required a small
+architectural change before it could participate safely in
+the toolkit.
+
+Previously, loading `Get-EnterpriseADUserReport.ps1`
+immediately executed the reporting workflow.
+
+Refactoring the workflow into the
+`Get-EnterpriseADUserReport` function separated loading
+from execution.
+
+The administrator can now load the toolkit without
+automatically generating a report and explicitly execute
+the reporting function when required.
+
+Testing also identified and corrected a missing opening
+comment marker in the reporting script before successful
+toolkit loading.
+
+The parser error was investigated from PowerShell output,
+the affected source was inspected, the malformed
+comment-based help block was corrected in the authoritative
+Git repository source, and the corrected script was
+transferred back to AD-DC-01 for verification.
+
+Final verification confirmed that the toolkit loads without
+output, exposes 16 reusable enterprise administration
+functions, and preserves the previously verified enterprise
+user reporting behavior.
+
+The completed 08C-06 implementation demonstrates how
+independently developed administrative automation can be
+organized into a coherent toolkit without sacrificing
+modularity, verification, or administrator control.
