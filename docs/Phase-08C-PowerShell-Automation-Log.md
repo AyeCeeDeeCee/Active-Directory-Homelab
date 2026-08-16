@@ -14,7 +14,7 @@
 | **Domain** | coachtorres.local |
 | **Author** | Coach Torres |
 | **Status** | In Progress |
-| **Last Updated** | 2026-08-04 |
+| **Last Updated** | 2026-08-16 |
 
 ---
 
@@ -867,3 +867,309 @@ The completed 08C-06 implementation demonstrates how
 independently developed administrative automation can be
 organized into a coherent toolkit without sacrificing
 modularity, verification, or administrator control.
+
+---
+
+## 08C-07 – Bulk User Provisioning
+
+### Objective
+
+Review, harden, and validate the existing CSV-driven Active
+Directory bulk user provisioning workflow while preserving
+its role as an optional supporting learner asset.
+
+The objective was to demonstrate repeatable user
+provisioning without redesigning the existing learner
+workflow or modifying the established canonical enterprise
+baseline.
+
+The bulk provisioning workflow remains separate from the
+enterprise administrative toolkit and from the planned
+canonical baseline recreation workflow.
+
+### Implementation
+
+Reviewed and updated:
+
+`Create-BulkADUsers.ps1`
+
+Supporting learner asset:
+
+`users.csv`
+
+The repository copy of `users.csv` remains intentionally
+empty so learners cloning the repository can define their
+own provisioning dataset.
+
+The expected CSV schema is:
+
+`FirstName,LastName,Username,Department,Password,OU`
+
+The existing provisioning script was preserved rather than
+redesigned.
+
+Targeted safeguards were added to improve the safety and
+repeatability of the learner workflow.
+
+Implemented safeguards include:
+
+• Required username validation.
+
+• Existing-user detection before account creation.
+
+• Required CSV field validation.
+
+• Target Organizational Unit validation.
+
+• Controlled `New-ADUser` execution using `try/catch`.
+
+• `-ErrorAction Stop` for controlled provisioning failures.
+
+• Post-provisioning Active Directory verification.
+
+The existing-user check uses:
+
+`Get-ADUser -Filter`
+
+This allows a prospective username that does not already
+exist to return an empty result without interrupting the
+provisioning workflow.
+
+The target Organizational Unit supplied through the CSV is
+validated using `Get-ADOrganizationalUnit` before account
+creation is attempted.
+
+The initial provisioning password is supplied through the
+CSV and converted to a SecureString before being passed to
+`New-ADUser`.
+
+This plaintext password workflow is retained specifically
+for the controlled homelab learning scenario and is not
+intended to represent enterprise credential-management
+practice.
+
+Provisioned accounts are configured with:
+
+`-ChangePasswordAtLogon $true`
+
+The script description was also corrected to accurately
+reflect the implemented behavior.
+
+The previous description referenced automatic security
+group assignment even though the script did not implement
+that functionality.
+
+The updated description now reflects user validation,
+Organizational Unit placement, account creation, and
+post-provisioning verification.
+
+### Testing and Verification
+
+The updated `Create-BulkADUsers.ps1` script was transferred
+from the authoritative Git repository on the Windows host
+to:
+
+`C:\Scripts`
+
+on AD-DC-01.
+
+Before execution, PowerShell parser validation was performed
+against the transferred script.
+
+Parser verification returned no syntax errors.
+
+A temporary CSV verification dataset was then created on
+AD-DC-01 using a single non-canonical learner account.
+
+Temporary verification account:
+
+• Name: Jordan Test
+
+• SamAccountName: `jtest`
+
+• Department: Lab
+
+• Target Organizational Unit:
+  `OU=Employees,DC=coachtorres,DC=local`
+
+Pre-provisioning verification confirmed that the `jtest`
+account did not already exist.
+
+During verification, `Get-ADUser -Identity jtest` produced
+an `ADIdentityNotFoundException` when the prospective
+identity was absent.
+
+The existence-check design was therefore reviewed.
+
+Testing confirmed that:
+
+`Get-ADUser -Filter "SamAccountName -eq 'jtest'"`
+
+returned no output when the prospective identity did not
+exist.
+
+The bulk provisioning script was updated to preserve
+`Get-ADUser -Filter` for duplicate-user detection.
+
+The corrected script was then executed against the
+temporary CSV dataset.
+
+The script reported:
+
+`User 'jtest' created successfully.`
+
+`Verified 'jtest' in Active Directory.`
+
+Independent verification was then performed using
+`Get-ADUser`.
+
+Verified account state:
+
+• Name: Jordan Test
+
+• SamAccountName: `jtest`
+
+• Department: Lab
+
+• Enabled: True
+
+• Distinguished Name:
+  `CN=Jordan Test,OU=Employees,DC=coachtorres,DC=local`
+
+This independently confirmed successful user creation,
+attribute assignment, account enablement, and Organizational
+Unit placement.
+
+The temporary verification account was then identified
+before removal using a read-only Active Directory query.
+
+The account was removed using:
+
+`Remove-ADUser -Identity jtest -Confirm:$false`
+
+Post-removal verification using `Get-ADUser -Filter`
+returned no result.
+
+This confirmed that the temporary verification account had
+been successfully removed.
+
+The previously verified enterprise administrative toolkit
+was then loaded using:
+
+`. C:\Scripts\Import-EnterpriseADToolkit.ps1`
+
+Toolkit loading completed with no output.
+
+`Get-EnterpriseADUserReport` was executed to independently
+verify the final canonical Active Directory state.
+
+The report returned the five canonical enterprise users:
+
+• Sara Chung – `schung`
+
+• Nathan Miller – `nmiller`
+
+• Alicia Simmons – `asimmons`
+
+• David Martinez – `dmartinez`
+
+• Micheal Rodriguez – `mrodriguez`
+
+The report also confirmed the expected security group
+memberships and Organizational Unit placement.
+
+The temporary `jtest` account was absent.
+
+Final verification confirmed that the controlled bulk
+provisioning test introduced no permanent change to the
+canonical enterprise environment.
+
+### Evidence
+
+Evidence captured during 08C-07 includes:
+
+• Bulk user provisioning and independent account
+  verification.
+
+• Controlled removal of the temporary learner account.
+
+• Independent verification that the temporary account no
+  longer existed.
+
+• Final canonical enterprise user-state verification using
+  the previously verified administrative toolkit.
+
+Evidence files:
+
+• `Phase08C-07-BUP-Vfd-Screenshot 2026-08-16 104759.png`
+
+• `Phase08C-07-BUP-Cleanup-Vfd-Screenshot 2026-08-16 105708.png`
+
+• `Phase08C-07-Usr-Ste-Vfd-Screenshot 2026-08-16 110233.png`
+
+### Engineering Notes
+
+Development and source modification occurred on the Windows
+host using Visual Studio Code.
+
+Git remains the authoritative source of
+`Create-BulkADUsers.ps1`.
+
+Execution and verification occurred on AD-DC-01.
+
+The existing learner provisioning workflow was intentionally
+preserved rather than replaced with a more complex
+enterprise provisioning framework.
+
+The objective of 08C-07 was to strengthen the existing
+beginner proof-of-work workflow with clear validation and
+verification controls while keeping the script readable and
+understandable for learners.
+
+The intentionally empty repository copy of `users.csv`
+preserves the script as a reusable learner asset without
+shipping a populated identity dataset.
+
+The canonical enterprise users were not added to the bulk
+provisioning dataset and were not recreated during testing.
+
+Duplicate-user detection provides an additional safeguard
+against attempting to create identities that already exist
+in Active Directory.
+
+Testing also demonstrated an important behavioral
+difference between `Get-ADUser -Identity` and
+`Get-ADUser -Filter`.
+
+`Get-ADUser -Identity` expects the requested identity to
+exist and produced an `ADIdentityNotFoundException` during
+the pre-provisioning test.
+
+`Get-ADUser -Filter` was better suited to this workflow
+because an absent prospective username could be represented
+as an empty result and handled intentionally by the script.
+
+This discovery reinforced the importance of selecting
+PowerShell query behavior based on the administrative
+operation being performed rather than assuming equivalent
+behavior between cmdlet parameter sets.
+
+The controlled verification scenario also reinforced the
+Phase 08 engineering standard of independently verifying
+resulting Active Directory state after modifying operations.
+
+Successful script output alone was not treated as sufficient
+proof of account creation.
+
+The newly created account was independently queried,
+verified, removed, and independently confirmed absent.
+
+The canonical enterprise user report was then reused to
+confirm that the established Active Directory baseline
+remained intact.
+
+Bulk user provisioning remains a supporting learner
+workflow.
+
+Canonical enterprise baseline recreation remains a separate
+engineering responsibility for 08C-08.

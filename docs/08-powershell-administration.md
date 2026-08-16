@@ -13,7 +13,7 @@
 | **Domain** | coachtorres.local |
 | **Author** | Coach Torres |
 | **Status** | In Progress |
-| **Last Updated** | 2026-07-31 |
+| **Last Updated** | 2026-08-16 |
 
 ---
 
@@ -353,6 +353,170 @@ verified PowerShell administration workflows can be
 organized behind a single administrative entry point while
 preserving separation of responsibilities.
 
+## 08C-07 – Bulk User Provisioning
+
+### Objective
+
+Review, harden, and validate the existing CSV-driven
+Active Directory bulk user provisioning workflow while
+preserving its purpose as an optional supporting learner
+asset.
+
+The workflow remains separate from the canonical enterprise
+automation and must not recreate, replace, or overwrite the
+five canonical enterprise users.
+
+### Implementation
+
+Reviewed and updated:
+
+`Create-BulkADUsers.ps1`
+
+The existing script was preserved rather than redesigned.
+
+Targeted safeguards were added to improve the safety and
+repeatability of the learner provisioning workflow:
+
+• Required username validation.
+
+• Existing-user detection using `Get-ADUser -Filter`.
+
+• Required CSV field validation.
+
+• Target Organizational Unit validation.
+
+• Controlled `New-ADUser` execution using `try/catch` and
+`-ErrorAction Stop`.
+
+• Post-provisioning Active Directory verification.
+
+The script continues to import provisioning data from:
+
+`users.csv`
+
+The repository copy of `users.csv` remains intentionally
+empty so learners cloning the repository can define their
+own provisioning dataset without receiving pre-populated
+enterprise identities.
+
+The expected CSV schema is:
+
+`FirstName,LastName,Username,Department,Password,OU`
+
+The provisioning password remains a plaintext CSV field for
+the controlled homelab learning scenario and is converted
+to a SecureString before being supplied to `New-ADUser`.
+
+Provisioned accounts are configured with
+`ChangePasswordAtLogon` enabled.
+
+### Testing and Verification
+
+PowerShell parser validation was performed on AD-DC-01
+before executing the provisioning workflow.
+
+The parser returned no syntax errors.
+
+A temporary non-canonical test account was used for
+controlled verification:
+
+• Name: Jordan Test
+
+• SamAccountName: `jtest`
+
+• Department: Lab
+
+• Target OU: `OU=Employees,DC=coachtorres,DC=local`
+
+Pre-provisioning verification confirmed that `jtest` did
+not already exist.
+
+`Create-BulkADUsers.ps1` was then executed against the
+temporary verification dataset.
+
+The script reported successful account creation and
+post-provisioning verification.
+
+Independent Active Directory verification confirmed:
+
+• Name: Jordan Test
+
+• SamAccountName: `jtest`
+
+• Department: Lab
+
+• Enabled: True
+
+• Distinguished Name:
+`CN=Jordan Test,OU=Employees,DC=coachtorres,DC=local`
+
+The temporary account was subsequently removed.
+
+Independent post-removal verification confirmed that
+`jtest` no longer existed.
+
+`Get-EnterpriseADUserReport` was then executed using the
+previously verified administrative toolkit.
+
+The report confirmed that the five canonical enterprise
+users remained present with their expected security group
+memberships and Organizational Unit placement.
+
+The controlled provisioning test therefore completed
+without introducing a permanent change to the canonical
+Active Directory environment.
+
+### Engineering Discovery
+
+Testing demonstrated an important distinction between
+`Get-ADUser -Identity` and `Get-ADUser -Filter` when
+performing existence checks.
+
+`Get-ADUser -Identity` produced an
+`ADIdentityNotFoundException` when the prospective test
+identity did not exist.
+
+Using `Get-ADUser -Filter` allowed the provisioning
+workflow to treat zero matching users as an empty result,
+making it better suited to the pre-provisioning duplicate
+user check used by this learner workflow.
+
+The verification also reinforced the distinction between
+generic learner provisioning and canonical enterprise
+baseline recreation.
+
+Bulk provisioning provides a repeatable onboarding
+exercise for learner-defined identities.
+
+Recreation of the canonical enterprise environment remains
+a separate engineering responsibility for Phase 08C-08.
+
+### Evidence
+
+Captured evidence:
+
+• `Phase08C-07-BUP-Vfd-Screenshot 2026-08-16 104759.png`
+
+• `Phase08C-07-BUP-Cleanup-Vfd-Screenshot 2026-08-16 105708.png`
+
+• `Phase08C-07-Usr-Ste-Vfd-Screenshot 2026-08-16 110233.png`
+
+Evidence demonstrates:
+
+• Controlled CSV-driven user provisioning.
+
+• Successful creation of a temporary non-canonical user.
+
+• Independent verification of account attributes and
+Organizational Unit placement.
+
+• Controlled removal of the temporary verification account.
+
+• Independent verification of account removal.
+
+• Preservation of the canonical enterprise user state
+after bulk-provisioning validation.
+
 ---
 
 ## Lessons Learned
@@ -404,6 +568,17 @@ Separating PowerShell function definition from execution
 allows automation components to be loaded safely into an
 interactive administrative session and executed only when
 the administrator intentionally invokes them.
+
+CSV-driven provisioning workflows should validate required
+input data, existing identities, and target Organizational
+Units before attempting to create Active Directory objects.
+
+Active Directory existence checks should use query behavior
+appropriate to the intended result. During bulk provisioning,
+`Get-ADUser -Filter` allows a missing prospective identity to
+return an empty result, while `Get-ADUser -Identity` expects
+the specified identity to exist and can produce an
+`ADIdentityNotFoundException` when it does not.
 
 ---
 
@@ -469,6 +644,9 @@ development and verification completed during Phase 08C:
 | [Enterprise OU Report Verification](../screenshots/Phase08C-05-OU-Rpt-Vfd-Screenshot%202026-08-09%20140321.png) | AD-DC-01 PowerShell verification showing the loaded Organizational Unit administration function and the final verified enterprise OU object-placement report. |
 | [Administrative Toolkit Script](../screenshots/Phase08C-06-VSC-Ipt-Tkt-Screenshot%202026-08-09%20220656.png) | Visual Studio Code implementation of `Import-EnterpriseADToolkit.ps1`, showing the single toolkit entry point and the four reusable Phase 08C automation components. |
 | [Administrative Toolkit Verification](../screenshots/Phase08C-06-Get-Cmd-Screenshot%202026-08-09%20220402.png) | AD-DC-01 PowerShell verification showing successful toolkit loading, execution of the enterprise user report, and availability of the complete 16-function enterprise administrative toolkit. |
+| [Bulk User Provisioning Verification](../screenshots/Phase08C-07-BUP-Vfd-Screenshot%202026-08-16%20104759.png) | AD-DC-01 PowerShell verification showing successful CSV-driven creation of the temporary `jtest` account and independent verification of the account name, SamAccountName, department, enabled status, and Organizational Unit placement. |
+| [Bulk User Provisioning Cleanup Verification](../screenshots/Phase08C-07-BUP-Cleanup-Vfd-Screenshot%202026-08-16%20105708.png) | AD-DC-01 PowerShell verification showing controlled removal of the temporary `jtest` account and subsequent confirmation that the account no longer existed. |
+| [Canonical User State Verification](../screenshots/Phase08C-07-Usr-Ste-Vfd-Screenshot%202026-08-16%20110233.png) | AD-DC-01 PowerShell verification using `Get-EnterpriseADUserReport`, confirming that the five canonical enterprise users, expected security group memberships, and Organizational Unit placement remained intact after the controlled bulk provisioning test. |
 
 ---
 
