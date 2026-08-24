@@ -13,7 +13,7 @@
 | **Domain** | coachtorres.local |
 | **Author** | Coach Torres |
 | **Status** | In Progress |
-| **Last Updated** | 2026-08-16 |
+| **Last Updated** | 2026-08-23 |
 
 ---
 
@@ -118,11 +118,13 @@ As Active Directory environments grow, automation becomes increasingly valuable 
 
 This project intentionally introduces PowerShell after the Active Directory environment has already been built through graphical administration tools.
 
-The existing Organizational Units, users, security groups, and Group Policy Objects remain the production environment being administered.
+The existing Organizational Units, users, security groups, and Group Policy Objects remain the production-like environment being administered throughout normal Phase 08 operations.
 
-PowerShell is used to extend that environment—not recreate it.
+PowerShell is primarily used to observe, administer, and automate that existing environment rather than replace it.
 
-This approach reflects how many organizations gradually introduce automation into mature enterprise environments while preserving existing infrastructure.
+A separate infrastructure recreation workflow introduced during Phase 08C-08 demonstrates how the enterprise Organizational Unit and security group baseline could be deployed into a clean Active Directory environment. This recreation capability remains isolated from normal operational administration and does not recreate employee identities, group memberships, or workstation state.
+
+This approach reflects how organizations can introduce automation into an established environment while also maintaining reusable infrastructure deployment capabilities separately from ongoing identity and endpoint lifecycle operations.
 
 ---
 
@@ -517,6 +519,147 @@ Organizational Unit placement.
 • Preservation of the canonical enterprise user state
 after bulk-provisioning validation.
 
+## 08C-08 – Baseline Recreation
+
+### Objective
+
+Develop and verify a PowerShell workflow capable of recreating
+the enterprise Active Directory infrastructure baseline in a
+clean deployment without modifying the existing canonical
+environment.
+
+Baseline recreation is intentionally separated from employee
+identity provisioning, security group membership assignment,
+workstation domain joining, and workstation placement.
+
+### Implementation
+
+Created:
+
+`Recreate-EnterpriseADBaseline.ps1`
+
+The infrastructure recreation workflow defines and recreates
+the enterprise Organizational Unit and security group baseline.
+
+The recreated infrastructure includes:
+
+• Admin
+
+• Employees
+
+• Groups
+
+• Lab
+
+• Service Accounts
+
+• Workstations
+
+and the following Global security groups:
+
+• Accounting
+
+• HR
+
+• IT
+
+• Managers
+
+The workflow verifies Organizational Unit placement and
+protection from accidental deletion as well as security group
+name, SamAccountName, scope, category, and Distinguished Name.
+
+A safety check prevents execution when the enterprise
+infrastructure baseline already exists.
+
+### Isolated Recreation Testing
+
+Created and verified:
+
+`Test-EnterpriseADBaselineRecreation.ps1`
+
+Because the canonical `coachtorres.local` infrastructure
+already exists, destructive recreation testing was not
+performed against the production-like baseline.
+
+Instead, an isolated temporary test structure was created
+beneath:
+
+`OU=08C-Recreation-Test,DC=coachtorres,DC=local`
+
+The test harness recreated the six-OU infrastructure structure
+and four security groups within the isolated test root.
+
+Verification confirmed the expected:
+
+• Organizational Unit names
+
+• Organizational Unit placement
+
+• Organizational Unit protection settings
+
+• Security group names
+
+• Security group SamAccountNames
+
+• Global group scope
+
+• Security group category
+
+• Security group Distinguished Names
+
+### Controlled Cleanup
+
+After successful verification, the test harness removed the
+temporary security groups, child Organizational Units, and
+test root Organizational Unit.
+
+Post-cleanup verification confirmed that the temporary
+`08C-Recreation-Test` infrastructure no longer existed.
+
+The existing enterprise infrastructure and canonical Active
+Directory environment were not modified.
+
+### Engineering Outcome
+
+Phase 08C-08 established a separation between infrastructure
+deployment and operational identity lifecycle management.
+
+`Recreate-EnterpriseADBaseline.ps1` represents infrastructure
+baseline recreation for a clean Active Directory deployment.
+
+Employee onboarding and recurring identity provisioning remain
+separate operational workflows rather than being embedded into
+the infrastructure recreation process.
+
+The isolated test harness demonstrated that the infrastructure
+baseline can be created, independently verified, and removed
+without modifying the established enterprise environment.
+
+### Evidence
+
+Captured evidence:
+
+• `Rcte-Epe-Bse-Screenshot 2026-08-23 194619.png`
+
+• `Test-Epe-Spt-Screenshot 2026-08-23 194356.png`
+
+• `Tst-Epe-Vfd-Screenshot 2026-08-23 195055.png`
+
+Evidence demonstrates:
+
+• Infrastructure recreation script implementation.
+
+• Isolated infrastructure recreation test implementation.
+
+• Successful creation and verification of the temporary
+  enterprise infrastructure.
+
+• Controlled cleanup of all temporary test infrastructure.
+
+• Preservation of the existing enterprise Active Directory
+  environment.
+
 ---
 
 ## Lessons Learned
@@ -580,6 +723,33 @@ return an empty result, while `Get-ADUser -Identity` expects
 the specified identity to exist and can produce an
 `ADIdentityNotFoundException` when it does not.
 
+Infrastructure recreation and operational identity lifecycle
+management should be treated as separate automation
+responsibilities.
+
+A clean-deployment infrastructure workflow can define and
+verify Organizational Units and security groups without
+embedding employee identities, security group memberships,
+or workstation state into the infrastructure baseline.
+
+Automation intended to create Active Directory infrastructure
+should include safety controls that detect an existing
+baseline before attempting modification.
+
+When infrastructure recreation cannot safely be executed
+against an established environment, an isolated temporary
+Organizational Unit can provide a controlled test boundary
+for creation, verification, and cleanup.
+
+Automated cleanup should be independently verified rather
+than assuming that removal commands successfully restored
+the environment.
+
+Testing infrastructure recreation inside an isolated
+namespace demonstrated that deployment logic can be
+validated without destroying or rebuilding the established
+enterprise Active Directory environment.
+
 ---
 
 ## Enterprise Notes
@@ -587,6 +757,21 @@ the specified identity to exist and can produce an
 The Active Directory environment created during earlier phases remains the source of truth throughout Phase 08.
 
 The five manually created enterprise users continue to represent existing production accounts and are administered through PowerShell rather than recreated through automation.
+
+The Phase 08C-08 infrastructure recreation workflow does not
+recreate these enterprise identities.
+
+Infrastructure recreation is limited to the defined
+Organizational Unit and security group baseline for a clean
+Active Directory deployment.
+
+Employee provisioning, security group membership assignment,
+workstation domain joining, and workstation placement remain
+separate operational lifecycle responsibilities.
+
+Recreation logic is validated against an isolated temporary
+Active Directory structure so the established enterprise
+environment remains protected during testing.
 
 ---
 
@@ -647,6 +832,9 @@ development and verification completed during Phase 08C:
 | [Bulk User Provisioning Verification](../screenshots/Phase08C-07-BUP-Vfd-Screenshot%202026-08-16%20104759.png) | AD-DC-01 PowerShell verification showing successful CSV-driven creation of the temporary `jtest` account and independent verification of the account name, SamAccountName, department, enabled status, and Organizational Unit placement. |
 | [Bulk User Provisioning Cleanup Verification](../screenshots/Phase08C-07-BUP-Cleanup-Vfd-Screenshot%202026-08-16%20105708.png) | AD-DC-01 PowerShell verification showing controlled removal of the temporary `jtest` account and subsequent confirmation that the account no longer existed. |
 | [Canonical User State Verification](../screenshots/Phase08C-07-Usr-Ste-Vfd-Screenshot%202026-08-16%20110233.png) | AD-DC-01 PowerShell verification using `Get-EnterpriseADUserReport`, confirming that the five canonical enterprise users, expected security group memberships, and Organizational Unit placement remained intact after the controlled bulk provisioning test. |
+| [Enterprise Infrastructure Recreation Script](../screenshots/Rcte-Epe-Bse-Screenshot%202026-08-23%20194619.png) | Visual Studio Code implementation of `Recreate-EnterpriseADBaseline.ps1`, showing the enterprise infrastructure recreation workflow for Organizational Units and security groups. |
+| [Infrastructure Recreation Test Script](../screenshots/Test-Epe-Spt-Screenshot%202026-08-23%20194356.png) | Visual Studio Code implementation of `Test-EnterpriseADBaselineRecreation.ps1`, showing the isolated test harness used to validate infrastructure recreation without modifying the established enterprise environment. |
+| [Infrastructure Recreation Test Verification](../screenshots/Tst-Epe-Vfd-Screenshot%202026-08-23%20195055.png) | AD-DC-01 PowerShell verification showing successful creation and verification of the isolated infrastructure baseline, controlled removal of the temporary test objects, and confirmation that the existing enterprise infrastructure was not modified. |
 
 ---
 

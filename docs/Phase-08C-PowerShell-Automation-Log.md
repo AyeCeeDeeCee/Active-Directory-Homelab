@@ -14,7 +14,7 @@
 | **Domain** | coachtorres.local |
 | **Author** | Coach Torres |
 | **Status** | In Progress |
-| **Last Updated** | 2026-08-16 |
+| **Last Updated** | 2026-08-23 |
 
 ---
 
@@ -1173,3 +1173,403 @@ workflow.
 
 Canonical enterprise baseline recreation remains a separate
 engineering responsibility for 08C-08.
+
+---
+
+## 08C-08 – Enterprise Active Directory Infrastructure Baseline Recreation
+
+### Objective
+
+Develop and validate a reusable PowerShell workflow for
+recreating the enterprise Active Directory infrastructure
+baseline in a clean deployment.
+
+The objective focuses on infrastructure required to support
+subsequent Active Directory operational lifecycle activities.
+
+The recreation workflow establishes the enterprise
+Organizational Unit structure, Organizational Unit protection
+settings, security groups, security group configuration, and
+required security group placement.
+
+Employee identity provisioning, security group membership
+assignment, workstation domain joining, and workstation
+placement are intentionally treated as separate operational
+lifecycle responsibilities.
+
+The implementation must also protect the existing canonical
+Active Directory environment from accidental recreation or
+modification during validation.
+
+### Implementation
+
+Created:
+
+`Recreate-EnterpriseADBaseline.ps1`
+
+Created supporting validation harness:
+
+`Test-EnterpriseADBaselineRecreation.ps1`
+
+`Recreate-EnterpriseADBaseline.ps1` provides the production
+workflow for recreating the enterprise Active Directory
+infrastructure baseline in a clean deployment.
+
+The recreation workflow defines and creates the following
+enterprise Organizational Units:
+
+• Admin
+
+• Employees
+
+• Groups
+
+• Lab
+
+• Service Accounts
+
+• Workstations
+
+Each Organizational Unit is configured with protection from
+accidental deletion enabled.
+
+The workflow also defines and creates the following enterprise
+security groups:
+
+• Accounting
+
+• HR
+
+• IT
+
+• Managers
+
+Each group is configured as a Global Security group and is
+placed within the Groups Organizational Unit.
+
+Before infrastructure creation begins, the script imports the
+Active Directory PowerShell module and verifies that an Active
+Directory domain can be detected.
+
+An existing-infrastructure safety check then searches for the
+defined enterprise Organizational Units and security groups.
+
+If any of the expected infrastructure objects already exist,
+the recreation workflow is blocked before modifying operations
+begin.
+
+The script performs verification after Organizational Unit
+creation and security group creation.
+
+A final infrastructure verification independently confirms
+the expected Organizational Unit names, Distinguished Names,
+accidental-deletion protection settings, security group names,
+SamAccountNames, group scopes, group categories, and security
+group Distinguished Names.
+
+`Test-EnterpriseADBaselineRecreation.ps1` provides an isolated
+validation harness for testing the infrastructure recreation
+logic without modifying the existing enterprise infrastructure.
+
+The harness creates the temporary root Organizational Unit:
+
+`08C-Recreation-Test`
+
+The six test Organizational Units are created beneath this
+temporary root, and four uniquely named test security groups
+are created within its isolated Groups Organizational Unit.
+
+The test harness performs creation verification and final
+infrastructure verification before beginning controlled cleanup.
+
+After successful verification, the temporary security groups,
+child Organizational Units, and test root Organizational Unit
+are removed.
+
+Post-cleanup verification confirms that the temporary test
+infrastructure no longer exists.
+
+### Testing and Verification
+
+Validation was performed on the existing Active Directory
+domain controller using the isolated recreation test harness.
+
+Before execution, the PowerShell parser was used to verify
+that the test harness contained no syntax errors.
+
+The script structure was also reviewed to confirm the presence
+of the expected creation, verification, cleanup, and
+post-cleanup operations.
+
+The isolated test harness was then executed:
+
+`C:\Scripts\Test-EnterpriseADBaselineRecreation.ps1`
+
+Execution successfully created the temporary test root
+Organizational Unit:
+
+`08C-Recreation-Test`
+
+The following child Organizational Units were successfully
+created and verified:
+
+• Admin
+
+• Employees
+
+• Groups
+
+• Lab
+
+• Service Accounts
+
+• Workstations
+
+The following isolated test security groups were successfully
+created and verified:
+
+• Accounting-08C
+
+• HR-08C
+
+• IT-08C
+
+• Managers-08C
+
+PowerShell reported:
+
+`ENTERPRISE INFRASTRUCTURE RECREATION TEST VERIFIED`
+
+The test harness then performed controlled cleanup.
+
+All four temporary security groups were removed.
+
+All six temporary child Organizational Units were removed.
+
+The temporary `08C-Recreation-Test` root Organizational Unit
+was then removed.
+
+Post-cleanup verification reported:
+
+`TEST ENVIRONMENT CLEANUP VERIFIED`
+
+The completed test demonstrated the full infrastructure
+recreation lifecycle:
+
+`Create → Verify → Validate → Remove → Verify Cleanup`
+
+The existing enterprise infrastructure was not modified
+during isolated validation.
+
+### Evidence
+
+The following screenshots document the 08C-08 implementation
+and isolated validation workflow.
+
+#### Infrastructure Recreation Script
+
+`Rcte-Epe-Bse-Screenshot 2026-08-23 194619.png`
+
+Documents the completed
+`Recreate-EnterpriseADBaseline.ps1` implementation in VS Code.
+
+The screenshot provides source-level evidence of the enterprise
+Active Directory infrastructure recreation workflow developed
+for 08C-08.
+
+#### Isolated Test Harness
+
+`Test-Epe-Spt-Screenshot 2026-08-23 194356.png`
+
+Documents the completed
+`Test-EnterpriseADBaselineRecreation.ps1` validation harness
+in VS Code.
+
+The screenshot provides source-level evidence of the isolated
+testing workflow used to validate infrastructure recreation
+without modifying the existing enterprise infrastructure.
+
+#### Recreation Test and Cleanup Verification
+
+`Tst-Epe-Vfd-Screenshot 2026-08-23 195055.png`
+
+Documents successful PowerShell execution of the isolated
+infrastructure recreation test.
+
+The captured output verifies:
+
+• Temporary test root OU creation
+
+• Six child OU creations and verifications
+
+• Four test security group creations and verifications
+
+• Successful final infrastructure verification
+
+• Controlled removal of the four test security groups
+
+• Controlled removal of the six child OUs
+
+• Removal of the temporary test root OU
+
+• Successful post-cleanup verification
+
+The final PowerShell output confirms:
+
+`ENTERPRISE INFRASTRUCTURE RECREATION TEST VERIFIED`
+
+and:
+
+`TEST ENVIRONMENT CLEANUP VERIFIED`
+
+The evidence demonstrates that the temporary infrastructure
+could be created, independently verified, removed, and verified
+as removed while leaving the existing enterprise infrastructure
+unchanged.
+
+### Engineering Outcome
+
+08C-08 established a clear separation between Active Directory
+infrastructure deployment and ongoing identity and endpoint
+lifecycle administration.
+
+The original baseline recreation concept was evaluated against
+the operational responsibilities already implemented throughout
+Phase 08C.
+
+That review identified that employee provisioning, security
+group membership assignment, workstation domain joining, and
+workstation placement should not be embedded within the
+infrastructure recreation workflow.
+
+Those activities represent operational lifecycle processes
+performed after the underlying Active Directory infrastructure
+has been established.
+
+The final 08C-08 architecture therefore defines the enterprise
+infrastructure baseline as:
+
+• Organizational Unit structure
+
+• Organizational Unit protection settings
+
+• Security group creation
+
+• Security group scope and category configuration
+
+• Security group placement
+
+This separation prevents the infrastructure recreation workflow
+from duplicating responsibilities already represented by the
+Phase 08C administration and provisioning workflows.
+
+The production recreation script also implements a defensive
+safety boundary.
+
+Before creating infrastructure, the script searches for the
+expected enterprise Organizational Units and security groups.
+
+If existing baseline infrastructure is detected, execution is
+blocked before recreation begins.
+
+Because the existing `coachtorres.local` environment already
+contains the enterprise infrastructure, destructive production
+testing was intentionally avoided.
+
+Instead, an isolated validation harness was developed to reproduce
+the infrastructure hierarchy beneath a temporary test root OU.
+
+This allowed the same fundamental Active Directory creation and
+verification operations to be exercised without deleting,
+replacing, or modifying the established enterprise baseline.
+
+The validation harness additionally implemented controlled
+cleanup and post-cleanup verification, demonstrating that the
+temporary test infrastructure could be safely removed after
+successful validation.
+
+08C-08 therefore demonstrates more than Active Directory object
+creation.
+
+It demonstrates infrastructure modeling, defensive automation,
+environment isolation, independent verification, controlled
+cleanup, and separation of infrastructure deployment from
+operational lifecycle administration.
+
+### Lessons Learned
+
+Infrastructure recreation and operational administration are
+related Active Directory responsibilities, but they should not
+automatically be treated as the same automation problem.
+
+Separating the enterprise infrastructure baseline from employee
+and workstation lifecycle operations produced a clearer and more
+reusable recreation model.
+
+The implementation reinforced the importance of validating the
+current environment before performing modifying operations.
+
+A recreation script should not assume that its target environment
+is empty simply because it was designed for clean deployment.
+
+Explicit detection of existing infrastructure provides a safety
+boundary that reduces the risk of accidental duplicate creation
+or modification of an established environment.
+
+The isolated test harness demonstrated the value of validating
+potentially destructive infrastructure automation without
+requiring destruction of the working enterprise baseline.
+
+Using a temporary parent Organizational Unit created a controlled
+namespace in which the infrastructure hierarchy could be created,
+verified, and removed independently.
+
+Verification also proved to be a separate engineering concern
+from creation.
+
+Successful execution of `New-ADOrganizationalUnit` or
+`New-ADGroup` alone does not prove that the resulting object
+matches the intended infrastructure state.
+
+The workflow therefore verifies object identity, placement,
+configuration, and protection settings after creation.
+
+Finally, cleanup requires the same level of verification as
+deployment.
+
+The test was not considered complete when the temporary objects
+were removed. Post-cleanup validation was used to confirm that
+the isolated test infrastructure no longer existed.
+
+### Current State
+
+08C-08 enterprise Active Directory infrastructure baseline
+recreation implementation is complete.
+
+`Recreate-EnterpriseADBaseline.ps1` defines the clean-deployment
+workflow for recreating the enterprise Organizational Unit and
+security group infrastructure baseline.
+
+`Test-EnterpriseADBaselineRecreation.ps1` provides an isolated
+validation harness for exercising the infrastructure recreation
+logic without modifying the existing enterprise baseline.
+
+The isolated test successfully demonstrated:
+
+• Temporary infrastructure creation
+
+• Organizational Unit verification
+
+• Security group verification
+
+• Final infrastructure verification
+
+• Controlled test-environment cleanup
+
+• Post-cleanup verification
+
+The existing enterprise Active Directory environment and
+WIN11-01 remained unchanged during validation.
+
+08C-08 is ready for final documentation review and repository
+publication.
