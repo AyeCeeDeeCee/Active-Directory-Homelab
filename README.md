@@ -52,7 +52,7 @@ Each phase answers a different engineering question.
 - âœ… Password Policy
 - âœ… Account Lockout Policy
 - âœ… Kerberos Policy
-- í´„ PowerShell Administration (In Progress)
+- ðŸš§ PowerShell Administration (In Progress)
 
 ---
 
@@ -75,6 +75,7 @@ Each phase answers a different engineering question.
 
 ```text
 docs/
+notes/
 screenshots/
 scripts/
 ```

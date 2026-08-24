@@ -13,7 +13,7 @@
 | **Domain** | coachtorres.local |
 | **Author** | Coach Torres |
 | **Status** | In Progress |
-| **Last Updated** | 2026-08-23 |
+| **Last Updated** | 2026-08-24 |
 
 ---
 
@@ -67,21 +67,15 @@ These prerequisites provide the enterprise environment required to safely admini
 
 ## Phase Roadmap
 
-This phase consists of the following objectives:
+This phase consists of the following engineering stages:
 
-| Objective | Description |
-|-----------|-------------|
-| **08.01** | Bulk User Creation using CSV |
-| **08.02** | Bulk Group Creation |
-| **08.03** | Bulk Organizational Unit Creation |
-| **08.04** | Disable Stale Accounts |
-| **08.05** | Password Reset Automation |
-| **08.06** | Unlock User Accounts |
-| **08.07** | Search and Query Active Directory |
-| **08.08** | Export Active Directory Users |
-| **08.09** | Generate Active Directory Reports |
+| Stage | Description |
+|-------|-------------|
+| **08A – Observe** | Audit and verify the existing Active Directory environment using read-only PowerShell commands. |
+| **08B – Respond** | Perform and verify routine Active Directory administrative operations using PowerShell. |
+| **08C – Automate** | Convert verified administrative procedures into reusable PowerShell automation workflows. |
 
-As the phase evolves, supporting documentation may be added to document major PowerShell workflows and enterprise administration tasks while maintaining a modular documentation structure.
+Supporting documentation records the verified PowerShell audit, administration, and automation workflows completed throughout Phase 08 while maintaining a modular documentation structure.
 
 ---
 
@@ -823,6 +817,10 @@ development and verification completed during Phase 08C:
 
 | Evidence | Description |
 | --- | --- |
+| [Enterprise Reporting Script](../screenshots/Phase08C-02-VS-Ent-Rpt-Screenshot%202026-08-03%20095715.png) | Visual Studio Code implementation of `Get-EnterpriseADUserReport.ps1`, showing the reusable enterprise Active Directory user reporting workflow. |
+| [Enterprise Reporting Verification](../screenshots/Phase08C-02-Ent-Rpt-Screenshot%202026-08-03%20095535.png) | AD-DC-01 PowerShell verification showing successful execution of the enterprise user reporting workflow and verified report output. |
+| [Account Lifecycle Administration Script](../screenshots/Phase08C-03-VSC-Entr-Usr-Screenshot%202026-08-04%20153825.png) | Visual Studio Code implementation of `Manage-EnterpriseUser.ps1`, showing the reusable enterprise account lifecycle administration functions. |
+| [Account Lifecycle Automation Verification](../screenshots/Phase08C-03-Auto-Log-Screenshot%202026-08-04%20154511.png) | AD-DC-01 PowerShell verification of the enterprise account lifecycle automation workflow. |
 | [Security Group Administration Script](../screenshots/Phase08C-04-VSC-Script-Screenshot%202026-08-09%20092157.png) | Visual Studio Code implementation of `Manage-EnterpriseGroup.ps1` within the local Git repository development environment. |
 | [Enterprise Group Report Verification](../screenshots/Phase08C-04-Entr-Grp-Rpt-Vrfd-Screenshot%202026-08-09%20092003.png) | AD-DC-01 PowerShell verification showing the loaded security group administration function and the final verified enterprise group-membership report. |
 | [Organizational Unit Administration Script](../screenshots/Phase08C-05-VSC-Spt-Screenshot%202026-08-09%20140439.png) | Visual Studio Code implementation of `Manage-EnterpriseOU.ps1` within the local Git repository development environment. |
