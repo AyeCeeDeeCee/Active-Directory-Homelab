@@ -41,18 +41,23 @@ Each phase answers a different engineering question.
 
 **Completed**
 
-- ✅ Windows Server deployment
+- ✅ Virtual Machine Creation
+- ✅ Windows Server 2022 Installation
 - ✅ Active Directory Domain Services
-- ✅ DNS configuration
-- ✅ Domain Controller promotion
-- ✅ Domain join
+- ✅ DNS Configuration
+- ✅ Domain Controller Promotion
+- ✅ Windows 11 Domain Workstation
+- ✅ Domain Join
 - ✅ Organizational Units
-- ✅ Users and Security Groups
-- ✅ Group Policy baseline
-- ✅ Password Policy
-- ✅ Account Lockout Policy
-- ✅ Kerberos Policy
+  - ✅ 06A – Users and Security Groups
+- ✅ Group Policy Baseline
+  - ✅ 07A – Password Policy
+  - ✅ 07B – Account Lockout Policy
+  - ✅ 07C – Kerberos Policy
 - ✅ PowerShell Administration
+  - ✅ 08A – Observe: Active Directory Audit
+  - ✅ 08B – Respond: PowerShell Administration
+  - ✅ 08C – Automate: PowerShell Automation
 - 🚧 Security Hardening (In Progress)
 
 ---
