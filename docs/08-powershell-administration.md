@@ -146,7 +146,7 @@ No production objects were modified during this stage.
 The complete audit command log for Phase 08A is documented
 separately:
 
-- [Phase 08A – Audit PowerShell Commands](Phase-08A-Audit-PowerShell-Commands.md)
+- [Phase 08A – Audit PowerShell Commands](08a-powershell-audit.md)
 
 This document contains the complete read-only audit,
 verification commands, and command output used to establish
@@ -181,7 +181,7 @@ execution to confirm the expected Active Directory state.
 The complete operational command log for Phase 08B is
 documented separately:
 
-- [Phase 08B – PowerShell Administration Log](Phase-08B-PowerShell-Administration-Log.md)
+- [Phase 08B – PowerShell Administration Log](08b-powershell-administration-log.md)
 
 This document contains the verified PowerShell commands,
 administrative workflow, observations, and validation

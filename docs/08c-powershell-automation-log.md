@@ -9,7 +9,7 @@
 | **Repository** | Active-Directory-Homelab |
 | **Phase** | 08 – PowerShell Administration |
 | **Stage** | 08C – Automate |
-| **Document** | Phase-08C-PowerShell-Automation-Log.md |
+| **Document** | 08c-powershell-automation-log.md |
 | **Platform** | Windows Server 2022 |
 | **Domain** | coachtorres.local |
 | **Author** | Coach Torres |

@@ -10,7 +10,7 @@
 | **Project** | Active Directory Homelab |
 | **Repository** | Active-Directory-Homelab |
 | **Phase** | 08B – Respond |
-| **Document** | Phase-08B-PowerShell-Administration-Log.md |
+| **Document** | 08b-powershell-administration-log.md |
 | **Platform** | Windows Server 2022 |
 | **Domain** | coachtorres.local |
 | **Author** | Coach Torres |
@@ -70,7 +70,7 @@ expected Active Directory state.
 
 ### Phase 08A – Observe
 
-[Phase-08A-Audit-PowerShell-Commands](Phase-08A-Audit-PowerShell-Commands.md)
+[08a-powershell-audit](08a-powershell-audit.md)
 
 ---
 
@@ -908,7 +908,7 @@ Administration documentation.
 
 - [08 – PowerShell Administration](08-powershell-administration.md)
 
-- [Phase-08A-Audit-PowerShell-Commands](Phase-08A-Audit-PowerShell-Commands.md)
+- [08a-powershell-audit](08a-powershell-audit.md)
 
 ---
 
