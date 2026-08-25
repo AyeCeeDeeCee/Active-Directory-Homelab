@@ -37,7 +37,7 @@ Each phase answers a different engineering question.
 
 # Current Status
 
-**Current Phase:** Phase 08 – PowerShell Administration
+**Current Phase:** Phase 09 – Security Hardening
 
 **Completed**
 
@@ -52,7 +52,8 @@ Each phase answers a different engineering question.
 - ✅ Password Policy
 - ✅ Account Lockout Policy
 - ✅ Kerberos Policy
-- 🚧 PowerShell Administration (In Progress)
+- ✅ PowerShell Administration
+- 🚧 Security Hardening (In Progress)
 
 ---
 
